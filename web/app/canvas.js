@@ -9,8 +9,9 @@ class SketchCanvas {
             box-shadow: 0px 0px 10px 2px black;
             `
         container.appendChild(this.canvas); /* Add element to the DOM */
-
         this.ctx = this.canvas.getContext('2d'); /* Allows enable the canvas api to draw in it */
+        
+        this.paths = []
         this.isDrawing = false;
         
         this.#addEventListeners(); /* # means private method -> private methods can't be called outside of the class */
@@ -19,21 +20,27 @@ class SketchCanvas {
     #addEventListeners() {
         this.canvas.onmousedown = (event) => {
             const mousePos = this.#getMouseLoc(event)
-            this.path = [mousePos]
+            this.paths.push([mousePos])
             this.isDrawing = true
         }
 
         this.canvas.onmousemove = (event) => {
             if (this.isDrawing) {
                 const mousePos = this.#getMouseLoc(event)
-                this.path.push(mousePos)
-                
+                const lastPath = this.paths[this.paths.length - 1]
+                lastPath.push(mousePos) /* Add point to the last path */
+                this.#redraw()
             }
         }
 
         this.canvas.onmouseup = () => {
             this.isDrawing = false;
         }
+    }
+
+    #redraw = () => {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height) /* Clean the canvas */
+        draw.paths(this.ctx, this.paths) /* Function to draw in the canvas, defined in app/draw.js */
     }
 
     #getMouseLoc = (event) => {
