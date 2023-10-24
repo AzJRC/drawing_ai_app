@@ -29,6 +29,12 @@ class SketchCanvas {
         this.#addEventListeners(); /* # means private method -> private methods can't be called outside of the class */
     }
 
+    reset() {
+        this.paths = [];
+        this.isDrawing = false;
+        this.#redraw();
+    }
+
     #addEventListeners() {
 
         /* Canvas event listeners */
