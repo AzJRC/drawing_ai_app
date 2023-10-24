@@ -14,7 +14,6 @@ draw.path = (ctx, path, color) => {
 }
 
 draw.paths = (ctx, paths, color='black') => {
-    console.log(paths)
     for (const path of paths) {
         draw.path(ctx, path, color);
     }

@@ -7,7 +7,7 @@
     </head>
     <body>
         <header>
-            <h1>AI drawing app</h1>
+            <h1>ARTIFICIAL INTELLIGENCE DRAW APP</h1>
         </header>
         <div id="instructionsContainer"></div>
         <script src="app/instructions.js"></script>
@@ -17,8 +17,18 @@
         <script src="app/canvas.js"></script> <!-- Create canvas where user will draw -->
 
         <script>
-            const instructions = new Instructions(instructionsContainer);
-            const canvas = new SketchCanvas(sketchCanvasContainer)
+            const defaultUsername = 'noUsername';
+            const data = {
+                'username': defaultUsername,
+                'session': `S${new Date().getTime()}${defaultUsername}-${Math.round(Math.random()*100)}`,
+                'drawings': {},
+            };
+
+            const canvas = new SketchCanvas(sketchCanvasContainer);
+            const instructions = new Instructions(instructionsContainer); /* Access app/instructions.js file */
+            const currentLabel = instructions.drawList[instructions.i];
+
+            data.drawings[currentLabel] = canvas.paths;
         </script>
     </body>
 </html>
