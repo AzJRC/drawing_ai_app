@@ -1,0 +1,22 @@
+{
+  "name": "drawing_ai_app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AzJRC/drawing_ai_app.git"
+  },
+  "author": "az_jrc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AzJRC/drawing_ai_app/issues"
+  },
+  "homepage": "https://github.com/AzJRC/drawing_ai_app#readme",
+  "dependencies": {
+    "nedb": "^1.8.0"
+  }
+}
