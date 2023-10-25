@@ -79,7 +79,7 @@ class Instructions {
                     canvas.reset();
                 }
             } else {
-                /* Download data */
+                /* Download and send data */
                 const downloadEl = document.createElement('a')
                 downloadEl.setAttribute('href', 
                     'data:text/plain;charset=utf-8,' +
@@ -89,6 +89,28 @@ class Instructions {
                 downloadEl.setAttribute('download', fileName);
                 downloadEl.style.display = 'none';
                 document.body.appendChild(downloadEl);
+
+                /* Send */
+
+                // Create an XMLHttpRequest object to send the data to the server
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/save-drawing', true); // Use the correct server endpoint
+
+                // Set the request headers
+                xhr.setRequestHeader('Content-Type', 'application/json');
+
+                // Define a callback function to handle the server's response
+                xhr.onload = () => {
+                    if (xhr.status === 200) {
+                        console.log('Drawing data saved successfully.');
+                    } else {
+                        console.error('Error saving drawing data.');
+                    }
+                };
+
+                // Send the data to the server as a JSON string
+                xhr.send(JSON.stringify(data));
+
                 downloadEl.click()
                 document.body.removeChild(downloadEl);
             }
@@ -109,5 +131,9 @@ class Instructions {
         this.input.style.display = 'block'
 
         this.#inputUpdate()
+    }
+
+    #sendFile = (data) => {
+        
     }
 }
