@@ -10,7 +10,7 @@ const port = 3000; // Port number
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.use(express.static('public'));
+app.use(express.static('docs'));
 
 app.use('/', routes);
 
