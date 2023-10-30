@@ -81,18 +81,7 @@ class Instructions {
             } else {
                 /* Download and send data */
                 this.#sendFile(data)
-
-                const downloadEl = document.createElement('a')
-                downloadEl.setAttribute('href', 
-                    'data:text/plain;charset=utf-8,' +
-                    encodeURIComponent(JSON.stringify(data))
-                )
-                const fileName = data.session+'_'+data.username+'.json';
-                downloadEl.setAttribute('download', fileName);
-                downloadEl.style.display = 'none';
-                document.body.appendChild(downloadEl);
-                downloadEl.click()
-                document.body.removeChild(downloadEl);
+                alert('Your drawings have been saved successfully!')
             }
         }
     }
@@ -124,6 +113,10 @@ class Instructions {
             body: JSON.stringify(data)
         })
         .then((res) => res.text())
-        .then(x => console.log(x))
+        .then(data => {
+            if (data == 'Drawing data saved successfully!') {
+                alert(data)
+            }
+        })
     }
 }
