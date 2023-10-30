@@ -1,38 +1,49 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const routes = require('./routes/routing');
-const fs = require('fs'); // Import the 'fs' module to work with files
-const path = require('path'); // Import the 'path' module for file paths
+const {Storage} = require('@google-cloud/storage');
+require('dotenv').config();
 
 const app = express();
 const port = 3000; // Port number
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
+app.use(express.json());
 app.use(express.static('docs'));
 
-app.use('/', routes);
+/* Google Cloud Storage */
+const projectId = process.env.GOOGLE_CLOUD_PROJECT_ID;
+const keyFilename = process.env.GOOGLE_CLOUD_KEY_FILENAME;
+const storage = new Storage({
+    projectId,
+    keyFilename,
+});
+const bucket = storage.bucket('drawings_app')
 
+
+
+/* Handle /save-drawing endpoint */
 app.post('/save-drawing', (req, res) => {
-    const drawingData = req.body;
-
-    // Define the filename based on the data
-    const filename = drawingData.username + '_' + drawingData.session + '.json';
-    const filePath = path.join(__dirname, 'drawing_json_files', filename);
-
-    // Save the drawing data to the specified file
-    fs.writeFile(filePath, JSON.stringify(drawingData), (err) => {
-        if (err) {
-            console.error('Error saving drawing data:', err);
-            res.sendStatus(500); // Internal Server Error
-        } else {
-            console.log('Drawing data saved successfully.');
-
-            // Respond with the saved filename for the client
-            res.json({ filename });
+    console.log('save called', req.body)
+    try {
+        if (req.body) {
+            console.log('File found')
+            const drawingData = req.body;
+            const fileName = drawingData.username + '_' + drawingData.session + '.json';
+            
+            const file = bucket.file(fileName);
+            file.save(JSON.stringify(drawingData), (err) => {
+                if (err) {
+                    console.error('Error saving drawing data:', err);
+                    res.status(500).send('Error saving drawing data');
+                } else {
+                    console.log('Drawing data saved successfully!');
+                    res.status(200).send('Drawing data saved successfully!')
+                }
+            })
+        }  else {
+            console.log('not request body', req.body)
         }
-    });
+    } catch (error) {
+        res.status(500).send(error);
+    }
 });
 
 app.listen(port, () => {
