@@ -3,7 +3,7 @@ const {Storage} = require('@google-cloud/storage');
 require('dotenv').config();
 
 const app = express();
-const port = 3000; // Port number
+const port = 8080; // Port number
 
 app.use(express.json());
 app.use(express.static('docs'));
